@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>北京中轴线 · 时空漫游</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header id="top-bar">
+            <div class="brand">
+                <span class="brand-icon">🏯</span>
+                <span class="brand-text">北京中轴线</span>
+                <span class="brand-sub">时空漫游</span>
+            </div>
+            <div class="header-actions">
+                <button id="btn-calibrate" class="icon-btn" title="校准标记位置">📍</button>
+                <button id="btn-reset" class="icon-btn" title="重置视角">🏠</button>
+                <button id="btn-zoom-in" class="icon-btn" title="放大">🔍</button>
+                <button id="btn-zoom-out" class="icon-btn" title="缩小">🔎</button>
+                <button id="btn-guide" class="icon-btn" title="游览指南">📖</button>
+            </div>
+        </header>
+
+        <div id="calibrate-bar" class="calibrate-hidden">
+            <span class="calibrate-info">📍 校准模式：拖拽标记到正确位置 | 键盘方向键微调（Shift加速）</span>
+            <button id="btn-cal-save" class="cal-btn primary">💾 保存校准</button>
+            <button id="btn-cal-reset" class="cal-btn">🔄 恢复默认</button>
+            <button id="btn-cal-exit" class="cal-btn">✕ 退出</button>
+        </div>
+
+        <main id="map-container">
+            <div id="map-viewport">
+                <div id="map-layer">
+                    <img id="map-image" src="assets/images/北京中轴线手绘地图.png" alt="北京中轴线手绘地图" draggable="false">
+                    <div id="markers-layer"></div>
+                </div>
+            </div>
+            <div id="zoom-indicator"><span id="zoom-level">100%</span></div>
+            <div id="compass">
+                <div class="compass-needle">▲</div>
+                <div class="compass-label">北</div>
+            </div>
+
+            <div id="side-nav" class="side-nav-collapsed">
+                <button id="side-nav-toggle" class="side-nav-toggle" title="展开地点列表">
+                    <span class="toggle-icon">☰</span>
+                    <span class="toggle-label">地标</span>
+                </button>
+                <div id="side-nav-panel" class="side-nav-panel">
+                    <div class="side-nav-header">
+                        <span>📍 中轴地标</span>
+                        <button id="side-nav-close">✕</button>
+                    </div>
+                    <div id="side-nav-list"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer id="page-footer">
+            <span class="footer-text">© 2026 北京市八一学校初一11班 郭俊麟</span>
+            <span class="footer-divider">|</span>
+            <span class="footer-text">北京中轴线 · 时空漫游</span>
+        </footer>
+
+        <div id="detail-overlay" class="overlay-hidden">
+            <div class="overlay-backdrop"></div>
+            <div class="detail-card">
+                <button class="detail-close" id="detail-close">✕</button>
+
+                <div class="gallery-stage" id="gallery-stage">
+                    <div class="gallery-track" id="gallery-track">
+                        <div class="gallery-slide" id="gallery-slide-0"><img src="" alt="" data-index="0"></div>
+                        <div class="gallery-slide" id="gallery-slide-1"><img src="" alt="" data-index="1"></div>
+                    </div>
+
+                    <div class="gallery-overlay">
+                        <h2 class="overlay-title" id="overlay-title"></h2>
+                        <div class="overlay-info">
+                            <span class="overlay-era" id="overlay-era"></span>
+                            <span class="overlay-years" id="overlay-years"></span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-error" id="gallery-error">
+                        <span class="error-icon">🖼️</span>
+                        <span class="error-text">图片加载失败</span>
+                    </div>
+
+                    <div class="gallery-nav">
+                        <button class="gallery-dot active" data-dot="0"></button>
+                        <button class="gallery-dot" data-dot="1"></button>
+                        <button class="gallery-dot" data-dot="2"></button>
+                        <button class="gallery-dot" data-dot="3"></button>
+                        <button class="gallery-dot" data-dot="4"></button>
+                    </div>
+                </div>
+
+                <div class="detail-body">
+                    <div class="body-divider"></div>
+                    <p class="detail-desc" id="detail-desc"></p>
+                </div>
+
+                <div class="detail-nav">
+                    <button id="detail-prev" class="nav-btn">◀ 上一个</button>
+                    <span class="nav-indicator" id="detail-index"></span>
+                    <button id="detail-next" class="nav-btn">下一个 ▶</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="lightbox" class="lightbox-hidden">
+            <div class="lightbox-backdrop"></div>
+            <button class="lightbox-close" id="lightbox-close">✕</button>
+            <div class="lightbox-content"><img id="lightbox-img" src="" alt=""></div>
+            <div class="lightbox-counter" id="lightbox-counter"></div>
+        </div>
+
+        <div id="guide-overlay" class="overlay-hidden">
+            <div class="overlay-backdrop"></div>
+            <div class="guide-card">
+                <button class="guide-close" id="guide-close">✕</button>
+                <h2>📖 游览指南</h2>
+                <ul>
+                    <li><b>🖱️ 鼠标滚轮</b> — 无极缩放</li>
+                    <li><b>🖱️ 拖拽</b> — 平移视角</li>
+                    <li><b>🖱️ 双击地图</b> — 放大到该位置</li>
+                    <li><b>🖱️ 点击图片区</b> — 全屏大图</li>
+                    <li><b>📍 点击标记</b> — 查看地标详情（含实景画廊）</li>
+                    <li><b>⌨️ 方向键</b> — 平移地图 / 切换地标</li>
+                    <li><b>⌨️ + / -</b> — 缩放地图</li>
+                    <li><b>Esc</b> — 关闭弹窗</li>
+                </ul>
+                <p class="guide-footer">北京中轴线全长约7.8公里，南起永定门，北至钟鼓楼。纵贯北京老城南北，是全世界现存最长、保存最完整的古代城市轴线，被誉为"北京老城的灵魂和脊梁"。2024年7月27日，北京中轴线正式列入联合国教科文组织《世界遗产名录》。</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/gallery-data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

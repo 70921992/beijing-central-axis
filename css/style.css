@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
+/* Google Fonts 已在 index.html 中通过 <link> 加载 */
 
 :root {
     --red: #C41E3A;

@@ -27,7 +27,6 @@ html, body {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-user-select: none;
-    touch-action: none;
     -webkit-touch-callout: none;
 }
 
@@ -85,6 +84,8 @@ html, body {
 #map-container {
     flex: 1; position: relative; overflow: hidden; cursor: grab;
     background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a14 100%);
+    touch-action: none;
+    -webkit-touch-action: none;
 }
 #map-container.grabbing { cursor: grabbing; }
 #map-container.calibrating { cursor: default; }

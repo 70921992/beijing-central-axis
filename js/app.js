@@ -91,6 +91,10 @@
         });
 
         loadGalleryImages();
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(function() {});
+        }
     }
 
     function bindDotClicks() {
@@ -176,6 +180,7 @@
             el.addEventListener('click', function(e) {
                 if (state.isCalibrating) return;
                 e.stopPropagation();
+                closeSideNav();
                 openDetail(i);
             });
             el.addEventListener('mousedown', function(e) { if (state.isCalibrating) onCalDragStart(e, i); });
@@ -309,7 +314,8 @@
         } else if (e.touches.length === 2) {
             var d = getTouchDist(e.touches);
             var f = d / state.pinchStartDist;
-            var ns = Math.min(MAX_SCALE, Math.max(MIN_SCALE, state.pinchStartScale * f));
+            var sensitivity = 0.85;
+            var ns = Math.min(MAX_SCALE, Math.max(MIN_SCALE, state.pinchStartScale * (1 + (f - 1) * sensitivity)));
             var rf = ns / state.scale;
             state.offsetX = state.pinchCenterX - rf * (state.pinchCenterX - state.offsetX);
             state.offsetY = state.pinchCenterY - rf * (state.pinchCenterY - state.offsetY);
@@ -333,8 +339,10 @@
 
     function updateMarkerScales() {
         var inv = state.isCalibrating ? 1 : 1 / state.scale;
+        var hideLabel = state.scale < 0.5 || state.scale > 4;
         markers.forEach(function(m) {
             m.el.style.transform = 'translate(-50%, -50%) scale(' + inv + ')';
+            m.el.classList.toggle('label-hidden', hideLabel);
         });
     }
 
@@ -432,6 +440,7 @@
             item.setAttribute('data-index', i);
             item.innerHTML = '<img class="side-nav-thumb" src="' + lm.icon + '" alt="' + lm.name + '" loading="lazy"><span class="side-nav-name">' + lm.name + '</span>';
             item.addEventListener('click', function() {
+                closeSideNav();
                 flyToLandmark(i);
                 openDetail(i);
             });
@@ -494,7 +503,6 @@
         setupGallery();
         updateMarkersActive();
         updateSideNavActive();
-        flyToLandmark(index);
     }
 
     function closeDetail() {

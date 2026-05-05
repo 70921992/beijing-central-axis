@@ -19,12 +19,16 @@
 html, body {
     width: 100%; height: 100%;
     overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
     font-family: 'Noto Serif SC', serif;
     background: var(--darker);
     color: var(--text);
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: none;
+    -webkit-touch-callout: none;
 }
 
 #app {
@@ -87,7 +91,8 @@ html, body {
 #map-viewport { position: absolute; width: 100%; height: 100%; overflow: hidden; }
 #map-layer { position: absolute; transform-origin: 0 0; will-change: transform; }
 #map-image { display: block; max-width: none; pointer-events: none; filter: drop-shadow(0 0 60px rgba(212,168,75,0.08)); }
-#markers-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+#markers-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; touch-action: none; }
+.landmark-marker { pointer-events: auto; touch-action: manipulation; -webkit-touch-action: manipulation; }
 
 /* ========== 地图标记点 ========== */
 .landmark-marker {
@@ -134,6 +139,7 @@ html, body {
 .landmark-marker.active .marker-label {
     background: rgba(196,30,58,0.9); color: #fff; border-color: var(--gold);
 }
+.marker-label.label-hidden { opacity: 0; pointer-events: none; }
 
 /* ========== 缩放指示器 & 指南针 ========== */
 #zoom-indicator {
@@ -273,9 +279,10 @@ html, body {
 
 /* ========== 画廊舞台 ========== */
 .gallery-stage {
-    position: relative; width: 100%; height: 300px;
+    position: relative; width: 100%; height: 220px; min-height: 180px;
     background: #1a1a1a; overflow: hidden; flex-shrink: 0;
     cursor: pointer;
+    touch-action: manipulation; -webkit-touch-action: manipulation;
 }
 .gallery-track { position: relative; width: 100%; height: 100%; }
 .gallery-slide {
@@ -425,16 +432,16 @@ html, body {
     #zoom-indicator { bottom: 10px; right: 10px; }
     #compass { bottom: 60px; right: 14px; }
     .detail-card { width: 98vw; }
-    .gallery-stage { height: 220px; }
-    .overlay-title { font-size: 24px; letter-spacing: 2px; }
-    .overlay-era { font-size: 12px; }
-    .overlay-years { font-size: 14px; }
+    .gallery-stage { height: 220px; min-height: 180px; }
+    .overlay-title { font-size: 22px; letter-spacing: 2px; }
+    .overlay-era { font-size: 11px; }
+    .overlay-years { font-size: 13px; }
     .detail-body { padding: 14px 16px; }
     .detail-desc { font-size: 12.5px; line-height: 1.6; }
     .detail-nav { padding: 10px 16px 14px; }
     .lightbox-content { inset: 16px; }
     .footer-text { font-size: 10px; }
-    #side-nav { top: 8px; left: 6px; }
+    #side-nav { top: 8px; left: 6px; z-index: 90; }
     .side-nav-toggle { width: 38px; height: 38px; border-radius: 10px; }
     .toggle-icon { font-size: 17px; }
     .toggle-label { font-size: 8px; }
@@ -442,6 +449,7 @@ html, body {
     .side-nav-thumb { width: 22px; height: 22px; }
     .side-nav-name { font-size: 10px; }
     .side-nav-item { padding: 5px 8px; gap: 6px; }
+    .marker-label { font-size: 11px; padding: 2px 8px; }
 }
 @media (min-width: 1200px) {
     .detail-card { width: min(90vw, 780px); }

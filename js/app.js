@@ -37,6 +37,9 @@
     var STORAGE_KEY = 'beijing_axis_calibrated_v2';
     var ADMIN_PASSWORD = '000000';
 
+    var IMG_W = 7087;
+    var IMG_H = 7424;
+
     function init() {
         loadCalibratedPositions();
         mapImage.addEventListener('load', onImageLoaded);
@@ -125,14 +128,14 @@
     }
 
     function onImageLoaded() {
-        state.imgW = mapImage.naturalWidth;
-        state.imgH = mapImage.naturalHeight;
-        mapImage.style.width = state.imgW + 'px';
-        mapImage.style.height = state.imgH + 'px';
-        mapLayer.style.width = state.imgW + 'px';
-        mapLayer.style.height = state.imgH + 'px';
-        markersLayer.style.width = state.imgW + 'px';
-        markersLayer.style.height = state.imgH + 'px';
+        state.imgW = IMG_W;
+        state.imgH = IMG_H;
+        mapImage.style.width = IMG_W + 'px';
+        mapImage.style.height = IMG_H + 'px';
+        mapLayer.style.width = IMG_W + 'px';
+        mapLayer.style.height = IMG_H + 'px';
+        markersLayer.style.width = IMG_W + 'px';
+        markersLayer.style.height = IMG_H + 'px';
         updateViewportSize();
         createMarkers();
         buildSideNav();

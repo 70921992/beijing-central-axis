@@ -40,7 +40,27 @@
     var IMG_W = 7087;
     var IMG_H = 7424;
 
+    function detectDevice() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var dpr = window.devicePixelRatio || 1;
+        var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        var tier = 'desktop';
+        if (w < 360) tier = 'tiny';
+        else if (w < 480) tier = 'phone';
+        else if (w < 768) tier = 'phablet';
+        else if (w < 1024) tier = 'tablet';
+
+        document.documentElement.setAttribute('data-device', tier);
+        document.documentElement.setAttribute('data-touch', isTouch ? '1' : '0');
+        document.documentElement.setAttribute('data-dpr', dpr.toFixed(0));
+
+        state.MAX_SCALE = isTouch ? 4 : 6;
+    }
+
     function init() {
+        detectDevice();
         loadCalibratedPositions();
         mapImage.addEventListener('load', onImageLoaded);
         if (mapImage.complete && mapImage.naturalWidth > 0) onImageLoaded();

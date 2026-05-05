@@ -33,7 +33,10 @@ html, body {
 #app {
     display: flex;
     flex-direction: column;
-    width: 100%; height: 100%;
+    width: 100%; height: 100%; height: 100dvh;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* ========== 顶部栏 ========== */
@@ -44,14 +47,14 @@ html, body {
     background: linear-gradient(180deg, rgba(15,15,26,0.96) 0%, rgba(15,15,26,0.88) 80%, rgba(15,15,26,0) 100%);
 }
 .brand { display: flex; align-items: baseline; gap: 10px; }
-.brand-icon { font-size: 26px; filter: drop-shadow(0 2px 4px rgba(212,168,75,0.3)); }
-.brand-text { font-size: 21px; font-weight: 900; color: var(--gold); letter-spacing: 4px; }
-.brand-sub { font-size: 12px; color: var(--gold-light); letter-spacing: 5px; opacity: 0.8; }
+.brand-icon { font-size: clamp(20px, 3vw, 28px); filter: drop-shadow(0 2px 4px rgba(212,168,75,0.3)); }
+.brand-text { font-size: clamp(16px, 2.6vw, 24px); font-weight: 900; color: var(--gold); letter-spacing: clamp(2px, 0.4vw, 4px); }
+.brand-sub { font-size: clamp(9px, 1.4vw, 14px); color: var(--gold-light); letter-spacing: clamp(2px, 0.6vw, 5px); opacity: 0.8; }
 .header-actions { display: flex; gap: 5px; }
 .icon-btn {
-    width: 36px; height: 36px; border-radius: 50%;
+    width: clamp(32px, 4.5vw, 42px); height: clamp(32px, 4.5vw, 42px); border-radius: 50%;
     border: 1px solid rgba(212,168,75,0.3); background: rgba(15,15,26,0.6);
-    color: var(--gold); font-size: 13px; cursor: pointer;
+    color: var(--gold); font-size: clamp(11px, 1.5vw, 15px); cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: var(--transition); backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -239,7 +242,7 @@ html, body {
     padding: 5px 12px; background: rgba(15,15,26,0.9);
     border-top: 1px solid rgba(212,168,75,0.12);
 }
-.footer-text { font-size: 14px; color: var(--gold-light); letter-spacing: 1px; font-weight: 700; }
+.footer-text { font-size: clamp(11px, 1.6vw, 15px); color: var(--gold-light); letter-spacing: 1px; font-weight: 700; }
 .footer-divider { font-size: 11px; color: #555; }
 
 /* ========== 通用弹窗 ========== */
@@ -258,8 +261,9 @@ html, body {
 
 /* ========== 详情卡片 ========== */
 .detail-card {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: min(94vw, 702px); max-height: 92vh;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(320px, 94vw, 702px); max-height: 92vh; max-height: 92dvh;
     background: linear-gradient(180deg, var(--paper) 0%, #FFF3E0 100%);
     border-radius: 20px; box-shadow: var(--shadow), 0 0 0 2px var(--gold);
     overflow: hidden; display: flex; flex-direction: column;
@@ -280,7 +284,7 @@ html, body {
 
 /* ========== 画廊舞台 ========== */
 .gallery-stage {
-    position: relative; width: 100%; height: 220px; min-height: 180px;
+    position: relative; width: 100%; height: clamp(180px, 38vw, 360px); min-height: 180px;
     background: #1a1a1a; overflow: hidden; flex-shrink: 0;
     cursor: pointer;
     touch-action: manipulation; -webkit-touch-action: manipulation;
@@ -308,16 +312,16 @@ html, body {
     color: #fff; z-index: 2; pointer-events: none;
 }
 .overlay-title {
-    font-size: 28px; font-weight: 900; letter-spacing: 3px;
+    font-size: clamp(18px, 3.5vw, 28px); font-weight: 900; letter-spacing: 3px;
     margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 .overlay-info { display: flex; align-items: baseline; gap: 12px; }
 .overlay-era {
-    font-size: 13px; letter-spacing: 1px;
+    font-size: clamp(10px, 1.6vw, 13px); letter-spacing: 1px;
     opacity: 0.9; text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 .overlay-years {
-    font-size: 16px; font-weight: 700; color: var(--gold-light);
+    font-size: clamp(11px, 1.8vw, 16px); font-weight: 700; color: var(--gold-light);
     letter-spacing: 1px; text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     background: rgba(0,0,0,0.35); padding: 3px 10px; border-radius: 10px;
 }
@@ -354,7 +358,7 @@ html, body {
     margin-bottom: 14px;
 }
 .detail-desc {
-    font-size: 14px; line-height: 1.65; color: var(--text);
+    font-size: clamp(11px, 1.5vw, 16px); line-height: clamp(1.5, 2vw, 1.65); color: var(--text);
     text-align: justify; white-space: pre-line;
 }
 .detail-desc .desc-header {
@@ -425,36 +429,53 @@ html, body {
 }
 
 /* ========== 响应式 ========== */
+/* ========== 响应式：触屏设备 ========== */
+@media (pointer: coarse) {
+    .icon-btn, .nav-btn, .side-nav-toggle { min-width: 44px; min-height: 44px; }
+    .gallery-dot { width: 14px; height: 14px; margin: 6px; }
+    .strip-scroll-btn { width: 34px; height: 34px; }
+    #btn-calibrate-reset, #btn-calibrate-save { padding: 10px 20px; font-size: 14px; }
+}
+
+/* ========== 响应式：手机 320-640px ========== */
 @media (max-width: 640px) {
     #top-bar { padding: 7px 10px; }
-    .brand-text { font-size: 17px; letter-spacing: 2px; }
-    .brand-sub { font-size: 10px; letter-spacing: 3px; }
-    .icon-btn { width: 30px; height: 30px; font-size: 12px; }
-    #zoom-indicator { bottom: 10px; right: 10px; }
-    #compass { bottom: 60px; right: 14px; }
-    .detail-card { width: 98vw; }
-    .gallery-stage { height: 220px; min-height: 180px; }
-    .overlay-title { font-size: 22px; letter-spacing: 2px; }
-    .overlay-era { font-size: 11px; }
-    .overlay-years { font-size: 13px; }
     .detail-body { padding: 14px 16px; }
-    .detail-desc { font-size: 12.5px; line-height: 1.6; }
     .detail-nav { padding: 10px 16px 14px; }
     .lightbox-content { inset: 16px; }
-    .footer-text { font-size: 12px; font-weight: 700; }
     #side-nav { top: 8px; left: 6px; z-index: 90; }
     .side-nav-toggle { width: 38px; height: 38px; border-radius: 10px; }
     .toggle-icon { font-size: 17px; }
     .toggle-label { font-size: 8px; }
-    .side-nav-panel { width: 130px; max-height: 60vh; }
+    .side-nav-panel { width: 130px; max-height: 60vh; max-height: 60dvh; }
     .side-nav-thumb { width: 22px; height: 22px; }
     .side-nav-name { font-size: 10px; }
     .side-nav-item { padding: 5px 8px; gap: 6px; }
     .marker-label { font-size: 11px; padding: 2px 8px; }
 }
-@media (min-width: 1200px) {
-    .detail-card { width: min(90vw, 780px); }
-    .gallery-stage { height: 360px; }
-    .overlay-title { font-size: 32px; }
-    .detail-desc { font-size: 15px; line-height: 1.7; }
+
+/* ========== 响应式：平板 641-1024px ========== */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .detail-card { max-width: 650px; }
+    .side-nav-panel { width: 180px; }
+}
+
+/* ========== 响应式：横屏手机 ========== */
+@media (orientation: landscape) and (max-height: 500px) {
+    #top-bar { padding: 4px 10px; }
+    .brand-icon { font-size: clamp(16px, 2.5vw, 24px); }
+    .brand-text { font-size: clamp(14px, 2vw, 20px); }
+    .brand-sub { font-size: clamp(8px, 1vw, 11px); }
+    .detail-card { flex-direction: row; max-height: 100vh; max-height: 100dvh; }
+    .gallery-stage { width: 45%; height: 100%; flex-shrink: 0; }
+    .detail-body { width: 55%; overflow-y: auto; }
+}
+
+/* ========== 无障碍：减少动画 ========== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
